@@ -129,14 +129,25 @@ class ExchangeRateMonitor:
 
             msg.attach(MIMEText(body, "plain"))
 
-            with smtplib.SMTP(
-                email_config["smtp_server"], email_config["smtp_port"]
-            ) as server:
-                server.starttls()
-                server.login(
-                    email_config["sender_email"], email_config["sender_password"]
-                )
-                server.send_message(msg)
+            # Use SSL by default for ports 465
+            if email_config["smtp_port"] == 465:
+                with smtplib.SMTP_SSL(
+                    email_config["smtp_server"], email_config["smtp_port"]
+                ) as server:
+                    server.login(
+                        email_config["sender_email"], email_config["sender_password"]
+                    )
+                    server.send_message(msg)
+            else:
+                # For other ports (like 587), use STARTTLS
+                with smtplib.SMTP(
+                    email_config["smtp_server"], email_config["smtp_port"]
+                ) as server:
+                    server.starttls()  # Enable TLS for all non-SSL connections
+                    server.login(
+                        email_config["sender_email"], email_config["sender_password"]
+                    )
+                    server.send_message(msg)
 
             logger.info("Alert email sent successfully")
         except Exception as e:
