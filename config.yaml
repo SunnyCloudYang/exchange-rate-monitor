@@ -1,0 +1,33 @@
+email:
+  # Email settings will be overridden by environment variables in production
+  smtp_server: smtp.gmail.com
+  smtp_port: 587
+  sender_email: your-email@gmail.com
+  sender_password: your-app-password # Only used for local development
+  recipient_email: recipient@example.com
+
+monitoring:
+  url: https://www.boc.cn/sourcedb/whpj/
+
+currencies:
+  - name: 美元
+    code: USD
+    conditions:
+      spot_buying_rate: # 现汇买入价
+        min: 725.0      # 最低价，低于此价会发送邮件
+        max: 733.0      # 最高价，高于此价会发送邮件
+      spot_selling_rate: # 现汇卖出价
+        min: 728.0
+        max: 750.0
+      cash_buying_rate: # 现钞买入价
+        min: 725.0
+        max: 733.0
+      cash_selling_rate: # 现钞卖出价
+        min: 728.0
+        max: 750.0
+
+  - name: 英镑
+    code: GBP
+    conditions:
+      spot_selling_rate:
+        min: 900.0
