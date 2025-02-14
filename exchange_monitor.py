@@ -106,11 +106,11 @@ class ExchangeRateMonitor:
             if current_rate is None:
                 continue
 
-            if current_rate < condition["min"]:
+            if condition["min"] and current_rate < condition["min"]:
                 alerts.append(
                     f"{currency_name} {rate_type}: {current_rate} below minimum {condition['min']}"
                 )
-            elif current_rate > condition["max"]:
+            elif condition["max"] and current_rate > condition["max"]:
                 alerts.append(
                     f"{currency_name} {rate_type}: {current_rate} above maximum {condition['max']}"
                 )
