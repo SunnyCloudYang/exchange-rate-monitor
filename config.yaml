@@ -14,16 +14,16 @@ currencies:
     code: USD
     conditions:
       spot_buying_rate: # 现汇买入价
-        min: 725.0      # 最低价，低于此价会发送邮件
-        max: 733.0      # 最高价，高于此价会发送邮件
+        min: 720.0      # 最低价，低于此价会发送邮件
+        max: 735.0      # 最高价，高于此价会发送邮件
       spot_selling_rate: # 现汇卖出价
-        min: 728.0
+        min: 727.3
         max: 750.0
       cash_buying_rate: # 现钞买入价
-        min: 725.0
-        max: 733.0
+        min: 720.0
+        max: 750.0
       cash_selling_rate: # 现钞卖出价
-        min: 728.0
+        min: 720.0
         max: 750.0
 
   - name: 英镑
