@@ -31,3 +31,9 @@ currencies:
     conditions:
       spot_selling_rate:
         min: 900.0
+
+  - name: 日元
+    code: JPY
+    conditions:
+      spot_selling_rate:
+        min: 4.70
