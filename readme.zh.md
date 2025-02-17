@@ -15,7 +15,15 @@
 - 🔄 通过 GitHub Actions 每 10 分钟运行一次
 - 📝 详细的日志记录，便于监控和调试
 
-## 安装设置
+## 使用方法
+
+1. Fork 本仓库
+2. 在仓库的 Secrets 中设置相关配置（详细信息参见[配置设置](#3-相关配置)的**第 2 部分**）
+3. 在 `config.yaml` 中设置你想监控的币种和汇率条件
+4. 启用仓库的 Actions
+5. 当汇率满足设定的条件时，设定的邮箱将会收到邮件通知。
+
+## 本地调试
 
 ### 1. 克隆仓库
 
@@ -30,11 +38,11 @@ cd exchange-rate-monitor
 pip install -r requirements.txt
 ```
 
-### 3. 配置设置
+### 3. 相关配置
 
 1. 本地开发时，更新 `config.yaml` 配置：
 
-    **注意：请不要在生产环境中使用本地配置，避免泄露个人信息。**
+    **注意：请不要将邮箱密码等信息上传到仓库，避免泄露个人隐私。**
 
     ```yaml
     email:
@@ -56,10 +64,10 @@ pip install -r requirements.txt
             max: 750.0
     ```
 
-2. 生产环境部署时，需要设置 GitHub Secrets：
+2. 生产环境部署时，需要设置 Repository Secrets：
 
    - 进入仓库的 Settings > Secrets
-   - 添加以下密钥：
+   - 添加以下 Secrets 变量：
      - `EMAIL_SMTP_SERVER`: SMTP 服务器地址（如 smtp.gmail.com）
      - `EMAIL_SMTP_PORT`: SMTP 端口（如 587）
      - `EMAIL_SENDER`: 发件人邮箱地址
@@ -68,19 +76,9 @@ pip install -r requirements.txt
 
 ### 4. 运行应用
 
-#### 本地开发
-
 ```bash
 python exchange_monitor.py
 ```
-
-#### GitHub Actions
-
-推送到 GitHub 后，应用程序将每 10 分钟自动运行一次。您也可以手动触发工作流：
-
-1. 进入仓库的 Actions 标签页
-2. 选择 "Monitor Exchange Rates" 工作流
-3. 点击 "Run workflow"
 
 ## 配置指南
 
@@ -117,10 +115,10 @@ currencies:
 
 ## 日志记录
 
-应用程序记录重要事件和错误，以帮助监控和调试：
+脚本会记录重要事件和错误，以帮助监控和调试：
 
-- 成功的汇率检查
-- 邮件通知发送
+- 汇率检查状态
+- 邮件发送通知
 - 获取或解析汇率时的错误
 - 配置问题
 

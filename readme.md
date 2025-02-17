@@ -2,7 +2,7 @@
 
 [中文版](readme.zh.md)
 
-A robust Python application that monitors Bank of China's exchange rates and sends email notifications when rates meet specified conditions. The application runs automatically every 10 minutes using GitHub Actions.
+A Python application that monitors Bank of China's exchange rates and sends email notifications when rates meet specified conditions. The application runs automatically every 10 minutes using GitHub Actions.
 
 ## Features
 
@@ -17,7 +17,15 @@ A robust Python application that monitors Bank of China's exchange rates and sen
 - 🔄 Runs every 10 minutes via GitHub Actions
 - 📝 Detailed logging for monitoring and debugging
 
-## Setup
+## Usage
+
+1. Fork this repository
+2. Create repository secrets for email configuration (See **part 2** of [configure settings](#3-configure-settings) for more details)
+3. Update `config.yaml` with your monitoring settings
+4. Enable GitHub Actions in your repository
+5. Then sit back and relax! You will receive email notifications when exchange rates meet your conditions.
+
+## Local Development
 
 ### 1. Clone the Repository
 
@@ -46,9 +54,6 @@ pip install -r requirements.txt
    sender_password: your-app-password # Only used for local development
    recipient_email: recipient@example.com
 
-   monitoring:
-   url: https://www.boc.cn/sourcedb/whpj/
-
    currencies:
    - name: 美元 # USD
        code: USD
@@ -61,7 +66,7 @@ pip install -r requirements.txt
            max: 750.0
    ```
 
-2. For production deployment, set up GitHub Secrets:
+2. For production deployment, please set up GitHub Secrets:
    - Go to your repository's Settings > Secrets
    - Add the following secrets:
      - `EMAIL_SMTP_SERVER`: SMTP server address (e.g., smtp.gmail.com)
@@ -72,19 +77,9 @@ pip install -r requirements.txt
 
 ### 4. Running the Application
 
-#### Local Development
-
 ```bash
 python exchange_monitor.py
 ```
-
-#### GitHub Actions
-
-The application will automatically run every 10 minutes once pushed to GitHub. You can also manually trigger the workflow:
-
-1. Go to your repository's Actions tab
-2. Select "Monitor Exchange Rates" workflow
-3. Click "Run workflow"
 
 ## Configuration Guide
 
