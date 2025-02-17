@@ -5,7 +5,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 import sys
 from typing import Dict, List, Optional
 import os
@@ -106,14 +106,38 @@ class ExchangeRateMonitor:
             if current_rate is None:
                 continue
 
+            alert_parts = []
             if "min" in condition and current_rate < condition["min"]:
-                alerts.append(
-                    f"{currency_name} {rate_type}: {current_rate} below minimum {condition['min']}"
+                alert_parts.append(
+                    f"""
+                    <div style="color: #D32F2F; padding: 10px; margin: 10px 0; background-color: #FFEBEE; border-left: 4px solid #D32F2F;">
+                        <h3 style="margin: 0;">🔔 Exchange Rate Alert - Below Minimum</h3>
+                        <p style="margin: 10px 0;"><strong>Currency:</strong> {currency_name}</p>
+                        <p style="margin: 10px 0;"><strong>Type:</strong> {rate_type}</p>
+                        <p style="margin: 10px 0;"><strong>Current Rate:</strong> {current_rate:.2f}</p>
+                        <p style="margin: 10px 0;"><strong>Minimum Threshold:</strong> {condition['min']:.2f}</p>
+                        <p style="margin: 10px 0;"><strong>Status:</strong> BELOW minimum</p>
+                        <p style="margin: 10px 0;"><strong>Time:</strong> {rates[currency_name]['time']}</p>
+                    </div>
+                    """
                 )
             elif "max" in condition and current_rate > condition["max"]:
-                alerts.append(
-                    f"{currency_name} {rate_type}: {current_rate} above maximum {condition['max']}"
+                alert_parts.append(
+                    f"""
+                    <div style="color: #2E7D32; padding: 10px; margin: 10px 0; background-color: #E8F5E9; border-left: 4px solid #2E7D32;">
+                        <h3 style="margin: 0;">🔔 Exchange Rate Alert - Above Maximum</h3>
+                        <p style="margin: 10px 0;"><strong>Currency:</strong> {currency_name}</p>
+                        <p style="margin: 10px 0;"><strong>Type:</strong> {rate_type}</p>
+                        <p style="margin: 10px 0;"><strong>Current Rate:</strong> {current_rate:.2f}</p>
+                        <p style="margin: 10px 0;"><strong>Maximum Threshold:</strong> {condition['max']:.2f}</p>
+                        <p style="margin: 10px 0;"><strong>Status:</strong> ABOVE maximum</p>
+                        <p style="margin: 10px 0;"><strong>Time:</strong> {rates[currency_name]['time']}</p>
+                    </div>
+                    """
                 )
+            
+            if alert_parts:
+                alerts.extend(alert_parts)
 
         return alerts
 
@@ -127,7 +151,7 @@ class ExchangeRateMonitor:
             msg["To"] = email_config["recipient_email"]
             msg["Subject"] = subject
 
-            msg.attach(MIMEText(body, "plain"))
+            msg.attach(MIMEText(body, "html", "utf-8"))
 
             # Use SSL by default for ports 465
             if email_config["smtp_port"] == 465:
@@ -178,7 +202,7 @@ class ExchangeRateMonitor:
 
         if all_alerts:
             subject = (
-                f"Exchange Rate Alert - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+                f"Exchange Rate Alert - {datetime.now().astimezone(timezone(timedelta(hours=8))).strftime('%Y-%m-%d %H:%M:%S')}"
             )
             body = "\n".join(all_alerts)
             self._send_email(subject, body)
