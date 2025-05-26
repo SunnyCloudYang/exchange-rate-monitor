@@ -6,6 +6,11 @@ email:
   sender_password: your-app-password # Only used for local development
   recipient_email: recipient@example.com
 
+  # IMAP settings for checking inbox
+  imap_server: imap.gmail.com
+  imap_port: 993
+  use_ssl: true
+
 monitoring:
   url: https://www.boc.cn/sourcedb/whpj/
 

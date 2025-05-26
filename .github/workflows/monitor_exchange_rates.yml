@@ -2,15 +2,19 @@ name: Monitor Exchange Rates
 
 on:
   schedule:
-    - cron: "*/5 0-14 * * *" # Run every 5 minutes between 8:00 and 22:00 (UTC+8)
+    - cron: "*/0 0-14 * * *" # Run every 10 minutes between 8:00 and 22:00 (UTC+8)
   workflow_dispatch: # Allow manual trigger
 
 jobs:
   monitor:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # Allow writing to repository contents
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }} # Use GitHub token for authentication
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -26,6 +30,8 @@ jobs:
         env:
           EMAIL_SMTP_SERVER: smtp.qiye.aliyun.com
           EMAIL_SMTP_PORT: 465
+          EMAIL_IMAP_SERVER: imap.qiye.aliyun.com
+          EMAIL_IMAP_PORT: 993
           EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}

@@ -14,8 +14,10 @@ A Python application that monitors Bank of China's exchange rates and sends emai
   - Spot Selling Rate (现汇卖出价)
   - Cash Selling Rate (现钞卖出价)
 - 📧 Email notifications when rates meet specified conditions
+- 💬 **Email reply commands** for quick threshold adjustments
 - 🔄 Runs every 10 minutes via GitHub Actions
 - 📝 Detailed logging for monitoring and debugging
+- 🔄 Automatic configuration persistence via git commits
 
 ## Usage
 
@@ -24,6 +26,57 @@ A Python application that monitors Bank of China's exchange rates and sends emai
 3. Update `config.yaml` with your monitoring settings
 4. Enable GitHub Actions in your repository
 5. Then sit back and relax! You will receive email notifications when exchange rates meet your conditions.
+
+## Email Reply Commands
+
+🆕 **New Feature**: You can now adjust monitoring thresholds by simply replying to alert emails!
+
+When you receive an exchange rate alert email, you can reply with specific commands to automatically adjust your setpoints. The system will:
+
+1. Parse your reply for adjustment commands
+2. Update the configuration automatically
+3. Commit changes to the repository
+4. Send you a confirmation email
+
+### Quick Commands
+
+Reply to any alert email with these commands:
+
+```
+ADJUST USD spot_buying_rate max 740
+SET GBP spot_selling_rate min 920 max 950
+REMOVE JPY spot_selling_rate min
+```
+
+### Available Commands
+
+- **ADJUST**: Modify existing setpoints without removing other conditions
+- **SET**: Replace all conditions for a specific rate type
+- **REMOVE**: Remove a specific condition (min or max)
+
+### Examples
+
+**Raise USD threshold:**
+
+```
+ADJUST USD spot_buying_rate max 740
+```
+
+**Set comprehensive GBP monitoring:**
+
+```
+SET GBP spot_selling_rate min 920 max 950
+```
+
+**Multiple adjustments in one email:**
+
+```
+ADJUST USD spot_buying_rate max 740
+ADJUST GBP spot_selling_rate min 925
+REMOVE JPY spot_selling_rate max
+```
+
+For detailed documentation on email reply commands, see [EMAIL_REPLY_COMMANDS.md](EMAIL_REPLY_COMMANDS.md).
 
 ## Local Development
 
@@ -74,6 +127,8 @@ pip install -r requirements.txt
      - `EMAIL_SENDER`: Your sender email address
      - `EMAIL_PASSWORD`: Your email password/app password
      - `EMAIL_RECIPIENT`: Recipient email address
+     - `EMAIL_IMAP_SERVER`: IMAP server address (e.g., imap.gmail.com) - for email reply functionality
+     - `EMAIL_IMAP_PORT`: IMAP port (e.g., 993) - for email reply functionality
 
 ### 4. Running the Application
 
