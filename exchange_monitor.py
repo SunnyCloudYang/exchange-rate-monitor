@@ -15,6 +15,10 @@ from imapclient import IMAPClient
 import email
 from email.header import decode_header
 from email_reply_parser import EmailReplyParser
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(
@@ -198,13 +202,22 @@ class ExchangeRateMonitor:
                 server.select_folder('INBOX')
                 
                 # Search for unread emails from the recipient (replies to our alerts)
-                messages = server.search(['UNSEEN', 'FROM', email_config["recipient_email"]])
+                messages = server.search(['UNSEEN'])
+
                 
                 for uid in messages:
                     raw_message = server.fetch([uid], ['RFC822'])[uid][b'RFC822']
                     email_message = email.message_from_bytes(raw_message)
                     
                     # Decode subject
+                    sender = ""
+                    if email_message['From']:
+                        decoded_sender = decode_header(email_message['From'])
+                        sender = "".join([
+                            part.decode(encoding or 'utf-8') if isinstance(part, bytes) else part
+                            for part, encoding in decoded_sender
+                        ]).lower()
+
                     subject = ""
                     if email_message['Subject']:
                         decoded_subject = decode_header(email_message['Subject'])
@@ -214,7 +227,7 @@ class ExchangeRateMonitor:
                         ])
                     
                     # Only process if it's a reply to our exchange rate alerts
-                    if "Exchange Rate Alert" in subject or "Re:" in subject:
+                    if ("Exchange Rate Alert" in subject or "Re:" in subject) and email_config["recipient_email"] in sender:
                         body = self._extract_email_body(email_message)
                         parsed_adjustments = self._parse_adjustment_commands(body)
                         
