@@ -2,7 +2,7 @@ name: Monitor Exchange Rates
 
 on:
   schedule:
-    - cron: "*/0 0-14 * * *" # Run every 10 minutes between 8:00 and 22:00 (UTC+8)
+    - cron: "*/10 0-14 * * *" # Run every 10 minutes between 8:00 and 22:00 (UTC+8)
   workflow_dispatch: # Allow manual trigger
 
 jobs:
