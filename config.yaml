@@ -4,7 +4,7 @@ currencies:
     spot_buying_rate:
       max: 738.0
     spot_selling_rate:
-      min: 716.0
+      min: 715.0
   name: 美元
 - code: GBP
   conditions:
@@ -19,11 +19,11 @@ currencies:
 email:
   imap_port: 993
   imap_server: imap.qiye.aliyun.com
+  recipient_email: sunnycloudyang@outlook.com
+  sender_email: noreply@thu-life.online
+  sender_password: EtcBMJlTenPJJAMz
   smtp_port: 465
   smtp_server: smtp.qiye.aliyun.com
-  recipient_email: YOUR_RECIPIENT_EMAIL
-  sender_email: YOUR_SENDER_EMAIL
-  sender_password: YOUR_SENDER_PASSWORD
   use_ssl: true
 monitoring:
   url: https://www.boc.cn/sourcedb/whpj/
