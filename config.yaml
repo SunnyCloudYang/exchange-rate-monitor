@@ -14,7 +14,7 @@ currencies:
 - code: JPY
   conditions:
     spot_selling_rate:
-      min: 4.6
+      min: 4.5
   name: 日元
 email:
   imap_port: 993
