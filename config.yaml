@@ -4,7 +4,7 @@ currencies:
     spot_buying_rate:
       max: 738.0
     spot_selling_rate:
-      min: 711.0
+      min: 708.0
   name: 美元
 - code: GBP
   conditions:
